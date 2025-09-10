@@ -1,0 +1,32 @@
+name: Push Backend Code
+
+on:
+  workflow_dispatch:  # Allows you to run this workflow manually from the Actions tab
+
+jobs:
+  push-backend-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # Example: Install dependencies, build, or generate code here if needed
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Commit and push backend code
+        run: |
+          git add backend
+          git commit -m "Automated: Add/update backend code" || echo "No changes to commit"
+          git push origin HEAD:${{ github.ref_name }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
